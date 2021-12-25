@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://www.yuque.com/u1048634/rwos6m" target="blank"><img src="https://gitee.com/plum429/drawing-bed/raw/master/1640405470897.png" width="200" alt="PlumAdmin Logo" /></a>
+  <a href="https://www.yuque.com/u1048634/rwos6m" target="blank"><img src="https://file.huamzl.wang/plumadmin_logo.png" width="200" alt="PlumAdmin Logo" /></a>
 </p>
 <p align="center">
     <code>PlumAdmin</code>后端基于<a href="https://github.com/top-think/think">Thinkphp</a> 前端基于<a href="https://github.com/PanJiaChen/vue-admin-template">vue-admin-template</a>开发而成的后台管理系统
