@@ -28,7 +28,6 @@
         "workerman/workerman": "^4.0",
         "workerman/redis-queue": "^1.0",
         "guzzlehttp/guzzle": "~6.0",
-        "phpoffice/phpexcel": "^1.8",
         "topthink/think-migration": "^3.0",
         "thans/thinkphp-filesystem-cloud": "^1.0",
       "ext-bcmath": "*"
