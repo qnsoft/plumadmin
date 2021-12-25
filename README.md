@@ -14,6 +14,13 @@
     <img src="https://svg.hamm.cn/badge.svg?key=License&value=MIT"/>
 </p >
 
+
+### 地址
+
+* **后端** [GITHUB](https://github.com/plum429/plumadmin) [GITEE](https://gitee.com/plum429/plumadmin)
+* **前端** [GITHUB](https://github.com/plum429/plumadmin-admin) [GITEE](https://gitee.com/plum429/plumadmin-admin)
+* **文档** [传送门](https://www.yuque.com/u1048634/rwos6m)
+
 ### 功能
 
 * <code>用户管理</code>
