@@ -113,6 +113,12 @@ class Service extends \think\Service
         });
     }
 
+    /**
+     * 注册命令行
+     * @author Plum
+     * @email liujunyi_coder@163.com
+     * @time 2021/12/26
+     */
     public function registerCommand()
     {
         $this->commands([
