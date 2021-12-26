@@ -17,9 +17,8 @@
 
 ### 地址
 
-* **后端** [GITHUB](https://github.com/plum429/plumadmin) [GITEE](https://gitee.com/plum429/plumadmin)
-* **前端** [GITHUB](https://github.com/plum429/plumadmin-admin) [GITEE](https://gitee.com/plum429/plumadmin-admin)
-* **文档** [传送门](https://www.yuque.com/u1048634/rwos6m)
+* **gitee**  [传送门](https://gitee.com/plum429/plumadmin)
+* **文档**   [传送门](https://www.yuque.com/u1048634/rwos6m)
 
 ### 功能
 
