@@ -69,7 +69,7 @@ npm run build
 ```
 ##### 部署伪静态
 ```nginx
-#如果使用了宝塔,可以用宝塔直接配置thinkphp的伪静态
+#如果使用了宝塔,可以用宝塔直接配置thinkphp的伪静态,记得将public设置为运行目录
 #如果没有使用宝塔,在nginx配置里加如下代码
 location / {
 	if (!-e $request_filename){
