@@ -95,7 +95,7 @@ const actions = {
             keepAliveName = getKeepAliveName(user.routes)
             //插入到模板
             routes = [{
-                path: '/',
+                path: '/admin/',
                 component: Layout,
                 redirect: user.routes[0].routes,
                 children: routes
