@@ -12,11 +12,8 @@ use think\facade\Route;
 
 
 Route::miss(function () {
-    $appName = explode('/', request()->pathinfo())[0];
-    if ($appName === 'admin') {
-        //后台管理系统
-        $path = app()->getRootPath() . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'admin' . DIRECTORY_SEPARATOR . 'index.html';
-        view($path);
-    }
+    //当匹配不到模块的时候直接走前端
+    $path = app()->getRootPath() . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'admin' . DIRECTORY_SEPARATOR . 'index.html';
+    view($path);
 });
 
