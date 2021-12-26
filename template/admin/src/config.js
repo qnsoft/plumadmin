@@ -1,7 +1,7 @@
 //生产环境下请求
 const PRO_REQUEST_URL = '/backend'
 //开发环境下请求
-const DEV_REQUEST_URL = 'http://plumadmin.test/backend'
+const DEV_REQUEST_URL = 'http://localhost:8000/backend'
 
 
 module.exports = {
