@@ -10,8 +10,13 @@
 // +----------------------------------------------------------------------
 use think\facade\Route;
 
-Route::get('think', function () {
-    return 'hello,ThinkPHP6!';
+
+Route::miss(function () {
+    $appName = explode('/', request()->pathinfo())[0];
+    if ($appName === 'admin') {
+        //后台管理系统
+        $path = app()->getRootPath() . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'admin' . DIRECTORY_SEPARATOR . 'index.html';
+        view($path);
+    }
 });
 
-Route::get('hello/:name', 'index/hello');
