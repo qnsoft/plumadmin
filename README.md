@@ -19,6 +19,7 @@
 
 * **gitee**  [传送门](https://gitee.com/plum429/plumadmin)
 * **文档**   [传送门](https://www.yuque.com/u1048634/rwos6m)
+* **预览** [传送门](http://preview.plumcloud.top)
 
 ### 功能
 
