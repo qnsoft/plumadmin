@@ -45,6 +45,38 @@
 - [ ] `主题` 优化前端页面
 - [ ] `vite构建` 前端使用vite构建,使其更快
 
+### 快速上手
+##### 部署后端
+```shell
+//下载源码 or git clone https://github.com/plum429/plumadmin.git
+git clone https://gitee.com/plum429/plumadmin.git
+//安装composer依赖
+cd plumadmin && composer install 
+//配置信息,复制.env.example修改成.env,补充信息
+cp .example.env .env
+//提前创建好数据库,插入表和数据
+php think migrate:run
+php think seed:run
+```
+##### 部署前端
+```shell
+//前端代码,在template/admin文件夹中
+//进入文件夹,安装依赖
+cd template/admin && npm install
+//src/config.js可以修改一些配置,线上请求地址无特殊需求无需调整
+//打包,打包会自动打包到软件/publick/admin下
+npm run build
+```
+##### 部署伪静态
+```nginx
+#如果使用了宝塔,可以用宝塔直接配置thinkphp的伪静态
+#如果没有使用宝塔,在nginx配置里加如下代码
+location / {
+	if (!-e $request_filename){
+		rewrite  ^(.*)$  /index.php?s=$1  last;   break;
+	}
+}
+```
 ### THINK
 
 - [vue-admin-template](https://github.com/PanJiaChen/vue-admin-template)
