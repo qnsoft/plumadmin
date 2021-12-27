@@ -45,7 +45,7 @@ const actions = {
             request.post('user.info/logout')
                 .then(data => {
                     dispatch('resetToken')
-                    router.push('/login')
+                    router.push('/admin/login')
                     resolve(data)
                 })
                 .catch(error => {
