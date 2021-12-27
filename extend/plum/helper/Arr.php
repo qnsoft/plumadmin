@@ -85,4 +85,15 @@ class Arr extends \think\helper\Arr
         }
         return $item;
     }
+
+    /**
+     * 转化普通数组
+     * @author Plum
+     * @email liujunyi_coder@163.com
+     * @time 2021/12/27
+     */
+    public static function toArray($data)
+    {
+        return is_array($data) ? $data : $data->toArray();
+    }
 }

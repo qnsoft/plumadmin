@@ -59,6 +59,17 @@ class FileModel extends Model
     }
 
     /**
+     * 获取器 URL
+     * @author Plum
+     * @email liujunyi_coder@163.com
+     * @time 2021/12/27
+     */
+    public function getUrlAttr($value, $data)
+    {
+        return str_replace('\\', '/', Filesystem::disk($data['driver'])->getUrl($data['path']));
+    }
+
+    /**
      * 加载配置
      * @author Plum
      * @email liujunyi_coder@163.com
@@ -96,11 +107,11 @@ class FileModel extends Model
             if (in_array(strtolower($file->getOriginalExtension()), $rule['ext'])) {
                 validate([
                     $field => [
-                        'fileExt'  => $rule['ext'],
+                        'fileExt' => $rule['ext'],
                         'fileSize' => $rule['size']
                     ]
                 ], [
-                    "{$field}.fileExt"  => "不支持此格式,请上传" . implode(',', $rule['ext']) . "的格式",
+                    "{$field}.fileExt" => "不支持此格式,请上传" . implode(',', $rule['ext']) . "的格式",
                     "{$field}.fileSize" => "上传{$rule['name']}不能超过" . round($rule['size'] / 1024 / 1024, 2) . 'MB',
                 ])->check([$field => $file]);
             }
@@ -120,17 +131,16 @@ class FileModel extends Model
         $this->valid();
         $path = Filesystem::putFile('', $file);
         $data = [
-            'name'        => $file->getOriginalName(),
-            'path'        => $path,
-            'url'         => str_replace('\\', '/', Filesystem::getUrl($path)),
-            'driver'      => config('filesystem.default'),
-            'mime'        => $file->getOriginalMime(),
-            'size'        => $file->getSize(),
-            'module'      => app('http')->getName(),
+            'name' => $file->getOriginalName(),
+            'path' => $path,
+            'driver' => config('filesystem.default'),
+            'mime' => $file->getOriginalMime(),
+            'size' => $file->getSize(),
+            'module' => app('http')->getName(),
             'uploader_id' => get_user_id(),
         ];
         $fileModel = self::create($data);
-        $fileModel->append(['size_text'])->visible(['name', 'url']);
+        $fileModel->append(['size_text', 'url'])->visible(['name', 'url', 'mime']);
         return $fileModel;
     }
 
@@ -143,6 +153,22 @@ class FileModel extends Model
     public function searchNameAttr($query, $value, $data)
     {
         $query->whereLike('name', "%$value%");
+    }
+
+    public function searchTypeAttr($query, $value, $data)
+    {
+        switch ($value) {
+            case 'image':
+                $query->whereLike('mime', "image/%");
+                break;
+            case 'video':
+                $query->whereLike('mime', "video/%");
+                break;
+            case 'file':
+                $query->whereNotLike('mime', "image/%")
+                    ->whereNotLike('mime', "video/%");
+                break;
+        }
     }
 
 

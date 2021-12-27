@@ -18,6 +18,7 @@ class Info extends AuthBackendController
     public function detail()
     {
         $data = UserService::getCurrentDetail();
+        get_image($data,['avatar']);
         return $this->renderSuccess($data);
     }
 
@@ -51,6 +52,7 @@ class Info extends AuthBackendController
     public function patch()
     {
         $allowFields = ['nickname', 'avatar'];
+        set_image($this->data['avatar']);
         $this->userinfo->allowField($allowFields)->save($this->data);
         $user = UserService::getCurrentDetail();
         return $this->renderSuccess($user, '操作成功');

@@ -2,7 +2,6 @@
 
 namespace app\model;
 
-use app\backend\service\CacheTags;
 use app\CacheTagEnum;
 use plum\core\base\Model;
 use plum\helper\Arr;

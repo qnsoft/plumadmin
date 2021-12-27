@@ -31,7 +31,6 @@ class File extends Migrator
         $this->table('file', ['comment' => "文件表"])
             ->addColumn('name', 'string', ['comment' => '文件名','default'=>''])
             ->addColumn('path', 'string', ['comment' => '文件地址','default'=>''])
-            ->addColumn('url', 'string', ['comment' => '文件地址','default'=>''])
             ->addColumn('driver', 'string', ['comment' => '上传类型','default'=>''])
             ->addColumn('mime', 'string', ['comment' => 'MIME类型','default'=>''])
             ->addColumn('size', 'integer', ['comment' => '文件大小(B)','default'=>0])

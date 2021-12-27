@@ -1,16 +1,15 @@
 <template>
   <div>
-    <el-image-viewer v-if="imageViewerVisible" :initial-index="imageViewerIndex" :url-list="previewList"
-                     :on-close="()=>{this.imageViewerVisible=false}"
-    ></el-image-viewer>
+    <preview-item ref="previewFile" :file="previewFile"/>
     <!--展示 多图-->
     <vue-draggable v-if="multiple" class="preview-list-container" filter=".no-draggable" v-model="previewList">
-      <div class="preview-list-item" v-for="(url,index) in previewList">
+      <div class="preview-list-item" v-for="(item,index) in previewList">
         <div class="preview-overlay">
           <i class="el-icon-delete" @click="previewList.splice(index,1)"></i>
-          <i class="el-icon-zoom-in" @click="imageViewerIndex=index;imageViewerVisible=true"></i>
+          <i class="el-icon-zoom-in" @click="handlePreviewFile(item)"></i>
         </div>
-        <img style="width: 100%;height: 100%;object-fit: cover" :src="url" alt="">
+        <!--<img style="width: 100%;height: 100%;object-fit: cover" :src="item.url" alt="">-->
+        <file-item style="width: 100%;height: 100%" :file="item"/>
       </div>
       <div class="preview-list-item no-draggable upload" @click="libraryVisible=true"
            v-if="limit===0 || limit>previewList.length"
@@ -21,18 +20,18 @@
     </vue-draggable>
     <!--单图-->
     <div v-else class="preview-list-container">
-      <div class="preview-list-item" v-for="(url,index) in previewList">
+      <div class="preview-list-item" v-for="(item,index) in previewList">
         <div class="preview-overlay" @click="libraryVisible=true">
           <i class="el-icon-delete" @click.stop="previewList.splice(index,1)"></i>
-          <i class="el-icon-zoom-in" @click.stop="imageViewerIndex=index;imageViewerVisible=true"></i>
+          <i class="el-icon-zoom-in" @click.stop="handlePreviewFile(item)"></i>
         </div>
-        <img style="width: 100%;height: 100%;object-fit: cover" :src="url" alt="">
+        <!--<img style="width: 100%;height: 100%;object-fit: cover" :src="item.url" alt="">-->
+        <file-item style="width: 100%;height: 100%" :file="item"/>
       </div>
       <div class="preview-list-item upload" @click="libraryVisible=true"
            v-if="previewList.length===0"
       >
         <i class="el-icon-upload"></i>
-        <span v-if="limit>0 && multiple">({{ previewList.length }}/{{ limit }})</span>
       </div>
     </div>
 
@@ -70,11 +69,7 @@
                 <div class="overlay-checked">
                   <i class="el-icon-check"></i>
                 </div>
-                <img
-                    class="file-item-preview"
-                    :src="item.url"
-                    :alt="item.name"
-                />
+                <file-item class="file-item-preview" style="width: 100%;height: 100%" :file="item"/>
               </div>
             </el-tooltip>
           </div>
@@ -106,14 +101,15 @@ import UploadButton from '@/components/Upload/UploadButton'
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
 import * as _ from 'lodash'
 import VueDraggable from 'vuedraggable'
+import FileItem from "@/components/Upload/FileItem";
+import PreviewItem from "@/components/Upload/PreviewItem";
 
 export default {
   name: 'index',
-  components: { UploadButton, VueDraggable, ElImageViewer },
+  components: {UploadButton, VueDraggable, ElImageViewer, FileItem, PreviewItem},
   props: {
     value: {
-      type: Array | String,
-      default: ''
+      default: undefined
     },
     multiple: {
       type: Boolean
@@ -121,10 +117,15 @@ export default {
     limit: {
       type: Number,
       default: 0
+    },
+    type: {//image,file,video
+      type: String,
+      default: undefined
     }
   },
   data() {
     return {
+      previewFile: undefined,
       imageViewerVisible: false,
       imageViewerIndex: 0,
       keyword: '',
@@ -143,6 +144,9 @@ export default {
   computed: {
     checkedLibraryList() {
       return this.libraryList.filter(e => e.checked)
+    },
+    previewUrlList() {
+      return this.previewList.map(e => e.url)
     }
   },
   created() {
@@ -171,9 +175,10 @@ export default {
       this.$http.post('file/userFilePage', {
         name: this.keyword.trim(),
         page: this.pagination.page,
-        size: this.pagination.size
+        size: this.pagination.size,
+        type: this.type
       })
-          .then(({ data }) => {
+          .then(({data}) => {
             this.libraryList = data.list
             this.pagination = data.pagination
           })
@@ -182,6 +187,7 @@ export default {
           })
 
     },
+    //选中文件库
     selectLibraryFile(index) {
       if (!this.multiple && this.checkedLibraryList.length > 0) {
         let checkedIndex = this.libraryList.findIndex(e => e.checked)
@@ -191,22 +197,23 @@ export default {
       }
       this.$set(this.libraryList[index], 'checked', !this.libraryList[index].checked)
     },
-    search: _.debounce(function() {
+    search: _.debounce(function () {
       if (this.keyword.trim() !== '') {
         this.getLibraryList()
       }
     }, 500),
     handleLibraryDelete() {
       let ids = this.checkedLibraryList.map(e => e.id)
-      this.$confirm('此操作将永久删除选中数据,是否继续?', '提示', { type: 'warning' })
+      this.$confirm('此操作将永久删除选中数据,是否继续?', '提示', {type: 'warning'})
           .then(() => {
-            this.$http.post('file/delete', { ids: ids })
-                .then(({ message }) => {
+            this.$http.post('file/delete', {ids: ids})
+                .then(({message}) => {
                   this.$message.success(message)
                   this.getLibraryList()
                 })
           })
     },
+    //确认选择图片库
     confirm() {
       if (this.checkedLibraryList.length > 0) {
         let previewList = []
@@ -218,9 +225,6 @@ export default {
         } else {
           previewList = [this.checkedLibraryList[0]]
         }
-        previewList = previewList.map(e => {
-          return this.$tools.isPlainObject(e) ? e.url : e
-        })
         this.previewList = previewList
       }
       //关闭弹窗
@@ -235,12 +239,16 @@ export default {
           this.$set(this.libraryList[index], 'checked', false)
         }
       })
+    },
+    //预览文件
+    handlePreviewFile(file) {
+      this.$refs.previewFile.open(file)
     }
   },
   watch: {
     libraryList: {
       immediate: true,
-      handler(val, old) {
+      handler() {
         //监听列表变换,来更新列表的高度
         this.setLibraryFileListHeight()
       }
@@ -253,7 +261,7 @@ export default {
       deep: true,
       handler(val) {
         if (this.multiple) {
-          this.previewList = val
+          this.previewList = val ?? []
         } else {
           this.previewList = val ? [val] : []
         }
@@ -304,7 +312,6 @@ export default {
       position: relative;
 
       .file-item-preview {
-        object-fit: cover;
         width: 100%;
         height: 100%;
       }
@@ -318,6 +325,7 @@ export default {
         position: absolute;
         width: 100%;
         height: 100%;
+        z-index: 99;
         background: rgba(#000, .4);
         align-items: center;
         justify-content: center;
@@ -377,6 +385,7 @@ export default {
     .preview-overlay {
       position: absolute;
       top: 0;
+      z-index: 99;
       width: 100%;
       height: 100%;
       background: rgba(#000, .4);

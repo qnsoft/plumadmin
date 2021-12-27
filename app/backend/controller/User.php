@@ -20,6 +20,7 @@ class User extends AuthBackendController
         $page = UserModel::autoOrder()
             ->autoSearch()
             ->paginate();
+        get_image($page,['avatar']);
         return $this->renderPage($page);
     }
 
@@ -35,9 +36,10 @@ class User extends AuthBackendController
             'username' => 'require',
             'password' => 'require',
             'nickname' => 'require',
-            'avatar'   => 'require',
+            'avatar' => 'require',
             'role_ids' => 'require'
         ]);
+        set_image($this->data['avatar']);
         UserService::create($this->data);
         return $this->renderSuccess();
     }
@@ -51,18 +53,19 @@ class User extends AuthBackendController
     public function update()
     {
         $this->validate($this->data, [
-            'id'       => 'require',
+            'id' => 'require',
             'username' => 'require',
             'nickname' => 'require',
-            'avatar'   => 'require',
+            'avatar' => 'require',
             'role_ids' => 'require'
         ]);
         //如果,password存在不为空,那么重设密码
         if (!empty($this->data['password'])) {
             $this->data['password'] = password_hash($this->data['password'], PASSWORD_DEFAULT);
-        }else{
+        } else {
             unset($this->data['password']);
         }
+        set_image($this->data['avatar']);
         UserService::update($this->data);
         return $this->renderSuccess();
     }
@@ -80,6 +83,7 @@ class User extends AuthBackendController
         //管理员ids
         $detail['role_ids'] = Arr::pluck($detail->role, 'id');
         $detail->hidden(['role', 'password']);
+        get_image($detail,['avatar']);
         return $this->renderSuccess($detail);
     }
 

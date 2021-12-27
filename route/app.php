@@ -17,7 +17,7 @@ Route::miss(function () {
         //后台管理系统
         $path = app()->getRootPath() . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'admin' . DIRECTORY_SEPARATOR . 'index.html';
         view($path);
-    }else{
+    } else {
         //如果找不到路由,直接跳转后台
         return redirect('/admin');
     }

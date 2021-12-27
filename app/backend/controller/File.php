@@ -30,11 +30,11 @@ class File extends AuthBackendController
     public function userFilePage()
     {
         $page = FileModel::autoOrder()
-            ->autoSearch('name')
+            ->autoSearch('name','type')
             ->where('uploader_id', $this->userinfo->id)
             ->where('module', $this->app->http->getName())
-            ->append(['size_text'])
-            ->visible(['id', 'name', 'url'])
+            ->append(['size_text','url'])
+            ->visible(['id', 'name','mime'])
             ->paginate();
         return $this->renderPage($page);
     }
